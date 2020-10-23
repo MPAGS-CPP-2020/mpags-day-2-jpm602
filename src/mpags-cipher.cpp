@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 // Our project headers
 #include "TransformChar.hpp"
@@ -60,18 +61,39 @@ int main(int argc, char* argv[])
   std::string inputText {""};
 
   // Read in user input from stdin/file
-  // Warn that input file option not yet implemented
-  if (!inputFile.empty()) {
-    std::cout << "[warning] input from file ('"
-              << inputFile
-              << "') not implemented yet, using stdin\n";
+  if (!inputFile.empty()) // Read input file if it exists
+  {
+    std::string line{""};
+    // Open file
+    std::ifstream inFile{inputFile};
+    if(inFile.is_open())
+    {
+        // Get line of code
+        while(std::getline(inFile, line))
+        {
+            // Loop over characters in the line and convert them
+            for(unsigned int i{0}; i<line.size(); ++i)
+            {
+                inputText += transformChar(line[i]);
+            }
+        }
+        inFile.close();
+    }
+    else // Error message if file wrong
+    {
+        std::cerr << "Unable to find input file" << std::endl;
+        return 1;
+    }
   }
 
-  // Loop over each character from user input
-  // (until Return then CTRL-D (EOF) pressed)
-  while(std::cin >> inputChar)
+  else
   {
-    inputText += transformChar(inputChar);
+    // Loop over each character from user input
+    // (until Return then CTRL-D (EOF) pressed)
+    while(std::cin >> inputChar)
+    {
+      inputText += transformChar(inputChar);
+    }
   }
   // Output the transliterated text
   // Warn that output file option not yet implemented
