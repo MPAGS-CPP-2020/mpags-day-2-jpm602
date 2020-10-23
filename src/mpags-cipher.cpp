@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
         while(std::getline(inFile, line))
         {
             // Loop over characters in the line and convert them
-            for(unsigned int i{0}; i<line.size(); ++i)
+            for(std::string::size_type i{0}; i<line.size(); ++i)
             {
                 inputText += transformChar(line[i]);
             }
