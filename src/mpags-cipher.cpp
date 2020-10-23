@@ -95,15 +95,29 @@ int main(int argc, char* argv[])
       inputText += transformChar(inputChar);
     }
   }
-  // Output the transliterated text
-  // Warn that output file option not yet implemented
-  if (!outputFile.empty()) {
-    std::cout << "[warning] output to file ('"
-              << outputFile
-              << "') not implemented yet, using stdout\n";
-  }
 
-  std::cout << inputText << std::endl;
+  // Encrypt/decrypt input
+  std::string outputText = inputText; // Placeholder
+  
+  // Output the transliterated text
+  if (!outputFile.empty()) 
+  {
+    // Open file
+        std::ofstream outFile{outputFile};
+        if(outFile.is_open())
+        {
+            outFile << outputText << std::endl;
+            outFile.close();
+        }
+        else // Error message if something wrong
+        {
+            std::cerr << "Unable to produce output file" << std::endl;
+        } 
+  }
+  else
+  {
+      std::cout << outputText << std::endl;
+  }
 
   // No requirement to return from main, but we do so for clarity
   // and for consistency with other functions
