@@ -7,6 +7,7 @@
 // Our project headers
 #include "TransformChar.hpp"
 #include "ProcessCommandLine.hpp"
+#include "runCaesarCipher.hpp"
 
 // Main function of the mpags-cipher program
 int main(int argc, char* argv[])
@@ -17,11 +18,13 @@ int main(int argc, char* argv[])
   // Options that might be set by the command-line arguments
   bool helpRequested {false};
   bool versionRequested {false};
+  bool encrypt {false};
+  unsigned long key {0};
   std::string inputFile {""};
   std::string outputFile {""};
 
   // Process command line arguments
-  bool argsWorked = processCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile);
+  bool argsWorked = processCommandLine(cmdLineArgs, helpRequested, versionRequested, encrypt, key, inputFile, outputFile);
 
   // Error if arguments didn't work
   if(!argsWorked)
@@ -34,7 +37,7 @@ int main(int argc, char* argv[])
   if (helpRequested) {
     // Line splitting for readability
     std::cout
-      << "Usage: mpags-cipher [-i <file>] [-o <file>]\n\n"
+      << "Usage: mpags-cipher [-i <file>] [-o <file>] [-k <int>]\n\n"
       << "Encrypts/Decrypts input alphanumeric text using classical ciphers\n\n"
       << "Available options:\n\n"
       << "  -h|--help        Print this help message and exit\n\n"
@@ -42,7 +45,9 @@ int main(int argc, char* argv[])
       << "  -i FILE          Read text to be processed from FILE\n"
       << "                   Stdin will be used if not supplied\n\n"
       << "  -o FILE          Write processed text to FILE\n"
-      << "                   Stdout will be used if not supplied\n\n";
+      << "                   Stdout will be used if not supplied\n\n"
+      << " -k|--key          Set key for the encryption\n\n"
+      << " -e|--encrypt      Sets code to encrypt rather than decrypt\n\n";
     // Help requires no further action, so return from main
     // with 0 used to indicate success
     return 0;
@@ -95,10 +100,9 @@ int main(int argc, char* argv[])
       inputText += transformChar(inputChar);
     }
   }
-
   // Encrypt/decrypt input
-  std::string outputText = inputText; // Placeholder
-  
+  std::string outputText = runCaesarCipher(encrypt, key, inputText);
+
   // Output the transliterated text
   if (!outputFile.empty()) 
   {
@@ -112,6 +116,7 @@ int main(int argc, char* argv[])
         else // Error message if something wrong
         {
             std::cerr << "Unable to produce output file" << std::endl;
+            return 1;
         } 
   }
   else
