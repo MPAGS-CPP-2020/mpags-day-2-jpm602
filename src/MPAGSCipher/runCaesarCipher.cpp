@@ -14,14 +14,11 @@ std::string runCaesarCipher(const bool encrypt, const unsigned long key, const s
     // loop over input text 
     for (size_t i{0}; i<inputText.size(); ++i)
     {
-        std::cout << i << std::endl;
-        std::cout << inputText.size() << std::endl;
         // find corresponding alphabet position of character
-        for (size_t j{0}; j<alphabet.size(); ++i)
+        for (size_t j{0}; j<alphabet.size(); ++j)
         {
             if(inputText[i] == alphabet[j])
             {
-                std::cout << i << " " << inputText[i] << " " << alphabet[j] << std::endl;
                 if(encrypt) // Encryption
                 {
                     // If no wrap-around occurs, just go key letters right
