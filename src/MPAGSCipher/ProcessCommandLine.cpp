@@ -10,6 +10,8 @@ bool processCommandLine(
   const std::vector<std::string>& args,
   bool& helpRequested,
   bool& versionRequested,
+  bool& encrypt,
+  unsigned long& key,
   std::string& inputFileName,
   std::string& outputFileName)
   {
@@ -55,6 +57,27 @@ bool processCommandLine(
     ++i;
         }
       }
+
+      // Encrypt/decrypt
+      else if (args[i] == "-e" || args[i] == "--encrypt")
+      {
+        encrypt = true;
+      }
+
+      else if(args[i] == "-k" || args[i] == "--key")
+      {
+        if (i == nCmdLineArgs-1) {
+          std::cerr << "[error] -i requires a filename argument" << std::endl;
+          // exit main with non-zero return to indicate failure
+          return false;
+        }
+        else
+        {
+          key = std::stoul(args[i+1]);
+          ++i;
+        }
+      }
+
       else {
         // Have an unknown flag to output error message and return non-zero
         // exit status to indicate failure
