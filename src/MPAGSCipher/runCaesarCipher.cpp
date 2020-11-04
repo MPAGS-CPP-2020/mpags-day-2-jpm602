@@ -37,7 +37,7 @@ std::string runCaesarCipher(const bool encrypt, const unsigned long key, const s
                 else // decryption
                 {
                     // If no wrap-around occurs, just go key letters left
-                    if(j-key <= 0)
+                    if(j-key > 1)
                     {
                         outputText += alphabet[j-key];
                         break; // Go to next character
